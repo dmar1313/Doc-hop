@@ -87,6 +87,7 @@ class DashboardPage extends Component {
 
     handleImportClick = () => {
         this.fileInputRef.current.click();
+        
     };
 
     render() {

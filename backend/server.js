@@ -11,7 +11,7 @@ app.use('/api/vehicles', vehiclesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/trips', tripsRouter);
 app.use('/config/firebaseAdmin', firebaseAdmin)
-
+app.use('/api/uploadCSV', require('./api/uploadCSV'));
 // Middleware
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Parse JSON bodies
