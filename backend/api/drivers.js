@@ -1,67 +1,66 @@
 const express = require('express');
+const admin = require('firebase-admin');
 const router = express.Router();
-const admin = require('firebase-admin'); 
 
 // GET all drivers
-router.get('/', (req, res) => {
-  const driversRef = admin.database().ref('drivers');
-  driversRef.once('value', (snapshot) => {
-    res.json(snapshot.val());
-  }, (errorObject) => {
-    console.log('The read failed: ' + errorObject.name);
-    res.status(500).send('The read failed: ' + errorObject.name);
-  });
+router.get('/', async (req, res) => {
+    try {
+        const driversSnapshot = await admin.database().ref('drivers').once('value');
+        const drivers = driversSnapshot.val();
+        res.json({ success: true, data: drivers, message: 'Drivers fetched successfully.' });
+    } catch (error) {
+        res.status(500).json({ success: false, data: null, message: 'Failed to fetch drivers.' });
+    }
 });
 
-// GET driver by ID
-router.get('/:id', (req, res) => {
-  const driverRef = admin.database().ref(`drivers/${req.params.id}`);
-  driverRef.once('value', (snapshot) => {
-    if (snapshot.exists()) {
-      res.json(snapshot.val());
-    } else {
-      res.status(404).send('Driver not found');
+// GET a specific driver by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const driverId = req.params.id;
+        const driverSnapshot = await admin.database().ref(`drivers/${driverId}`).once('value');
+        const driver = driverSnapshot.val();
+        if (driver) {
+            res.json({ success: true, data: driver, message: 'Driver fetched successfully.' });
+        } else {
+            res.status(404).json({ success: false, data: null, message: 'Driver not found.' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, data: null, message: 'Failed to fetch driver.' });
     }
-  }, (errorObject) => {
-    console.log('The read failed: ' + errorObject.name);
-    res.status(500).send('The read failed: ' + errorObject.name);
-  });
 });
 
-// POST create new driver
-router.post('/', (req, res) => {
-  const newDriverRef = admin.database().ref('drivers').push();
-  newDriverRef.set(req.body, (error) => {
-    if (error) {
-      res.status(500).send('Data could not be saved.' + error);
-    } else {
-      res.status(200).send('Data saved successfully.');
+// POST a new driver
+router.post('/', async (req, res) => {
+    try {
+        const newDriver = req.body; // Add validation here
+        const driverRef = await admin.database().ref('drivers').push(newDriver);
+        res.status(201).json({ success: true, data: { id: driverRef.key }, message: 'Driver created successfully.' });
+    } catch (error) {
+        res.status(500).json({ success: false, data: null, message: 'Failed to create driver.' });
     }
-  });
 });
 
-// PUT update existing driver
-router.put('/:id', (req, res) => {
-  const driverRef = admin.database().ref(`drivers/${req.params.id}`);
-  driverRef.update(req.body, (error) => {
-    if (error) {
-      res.status(500).send('Data could not be updated.' + error);
-    } else {
-      res.status(200).send('Data updated successfully.');
+// PUT (update) a driver
+router.put('/:id', async (req, res) => {
+    try {
+        const driverId = req.params.id;
+        const updatedData = req.body; // Add validation here
+        await admin.database().ref(`drivers/${driverId}`).update(updatedData);
+        res.json({ success: true, data: null, message: 'Driver updated successfully.' });
+    } catch (error) {
+        res.status(500).json({ success: false, data: null, message: 'Failed to update driver.' });
     }
-  });
 });
 
-// DELETE remove driver
-router.delete('/:id', (req, res) => {
-  const driverRef = admin.database().ref(`drivers/${req.params.id}`);
-  driverRef.remove((error) => {
-    if (error) {
-      res.status(500).send('Could not delete driver.' + error);
-    } else {
-      res.status(200).send('Driver deleted successfully.');
+// DELETE a driver
+router.delete('/:id', async (req, res) => {
+    try {
+        const driverId = req.params.id;
+        await admin.database().ref(`drivers/${driverId}`).remove();
+        res.json({ success: true, data: null, message: 'Driver deleted successfully.' });
+    } catch (error) {
+        res.status(500).json({ success: false, data: null, message: 'Failed to delete driver.' });
     }
-  });
 });
 
 module.exports = router;
