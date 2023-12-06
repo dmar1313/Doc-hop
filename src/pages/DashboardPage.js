@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import "firebase/database";
 import { firebase } from './firebase';
 class DashboardPage extends Component {
   constructor(props) {
@@ -26,21 +25,21 @@ class DashboardPage extends Component {
     });
   };
 
-  handleFilterSubmit = async () => {
+ handleFilterSubmit = async () => {
     try {
-      const db = firebase.database();
-      const tripsRef = db.ref('trips');
-      const snapshot = await tripsRef
-        .orderByChild('tripDate')
-        .startAt(this.state.filter.fromDate)
-        .endAt(this.state.filter.toDate)
-        .once('value');
-      const trips = snapshot.val();
-      this.setState({ trips });
+        const db = firebase.database();
+        const tripsRef = db.ref('trips');
+        const snapshot = await tripsRef
+                .orderByChild('tripDate')
+                .startAt(this.state.filter.fromDate)
+                .endAt(this.state.filter.toDate)
+                .once('value');
+        const trips = snapshot.val();
+        this.setState({ trips });
     } catch (error) {
-      console.error('Error fetching filtered trips:', error);
+        console.error('Error fetching filtered trips:', error);
     }
-  };
+};
     handleFileUpload = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
@@ -58,33 +57,22 @@ class DashboardPage extends Component {
     };
 
     handleFileChange = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const formData = new FormData();
-        formData.append('file', file);
-        try {
-            const response = await fetch('/api/uploadCSV', {
-                method: 'POST',
-                body: formData,
-            });
-            const data = await response.json();
-            if (response.status === 200) {
-                this.setState({
-                    trips: data.trips,
-                    uploadStatus: 'Success',
-                    uploadDetails: data.processedInfo,
-                });
-            } else {
-                this.setState({
-                    uploadStatus: 'Failed',
-                    uploadDetails: data.error,
-                });
-            }
-        } catch (error) {
-            console.error('Error uploading file:', error);
+    const file = event.target.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+        const response = await fetch('/api/uploadCSV', {method: 'POST', body: formData});
+        const data = await response.json();
+        if (response.status === 200) {
+            this.setState({trips: data.trips, uploadStatus: 'Success', uploadDetails: data.processedInfo });
+        } else {
+            this.setState({ uploadStatus: 'Failed', uploadDetails: data.error });
         }
-    };
-
+        } catch (error) {
+        console.error('Error uploading file:', error);
+    }
+};
     handleImportClick = () => {
         this.fileInputRef.current.click();
         
@@ -119,17 +107,17 @@ class DashboardPage extends Component {
                                 className="border p-1 bg-[#2d2d2d] text-white rounded-md"
                             />
                             <input
-                                name="tripNumber"
-                                value={this.state.filter.tripNumber}
-                                onChange={this.handleFilterChange}
-                                placeholder="Trip number"
-                            />
+                              name="tripNumber"
+                               value={this.state.filter.tripNumber}
+                              onChange={this.handleFilterChange}
+                              placeholder="Trip number"
+                              />
                             <input
-                                name="driver"
+                               name="driver"
                                 value={this.state.filter.driver}
-                                onChange={this.handleFilterChange}
-                                placeholder="Driver"
-                            />
+                               onChange={this.handleFilterChange}
+                               placeholder="Driver"
+                             />
                             <button onClick={this.handleFilterSubmit}>Filter</button>
                         </div>
                         <button onClick={this.handleImportClick} className="bg-[#4CAF50] text-white px-3 py-1 text-sm rounded-md">

@@ -1,9 +1,14 @@
 const csv = require('csv-parse');
 const fs = require('fs');
+const admin = require('firebase-admin');
+const serviceAccount = require('./path/to/serviceAccountKey.json');
 
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 const parseCSV = async (filePath) => {
- return new Promise((resolve, reject) => {
-    const parser = csv();
+  return new Promise((resolve, reject) => {
+    const parser = csv({ columns: true });
     const trips = [];
 
     parser.on('readable', () => {
@@ -28,7 +33,6 @@ const parseCSV = async (filePath) => {
           wheelchair: row['Wheelchair'] === 'True',
           highRisk: row['High Risk'] === 'True',
           confirmationNumber: row['Confirmation Number']
-          // Note: Adjust boolean conversions as necessary based on actual CSV content
         });
       }
     });
@@ -42,5 +46,6 @@ const parseCSV = async (filePath) => {
     });
 
     fs.createReadStream(filePath).pipe(parser);
- });
+  });
 };
+module.exports = parseCSV;

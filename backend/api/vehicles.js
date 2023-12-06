@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
+const db = admin.firestore();
 
-// GET all vehicles
-router.get('/', (req, res) => {
-  const vehiclesRef = admin.database().ref('vehicles');
-  vehiclesRef.once('value', (snapshot) => {
-    res.json(snapshot.val());
-  });
+router.get('/', async (req, res) => {
+  const users = await db.collection('users').get();
+  res.json({ success: true, data: users.docs.map(doc => doc.data()), message: 'Users fetched successfully.' });
 });
 
 // GET vehicle by ID

@@ -1,17 +1,10 @@
-const admin = require('firebase-admin');
-const path = require('path');
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
-try {
-    // Assuming your Firebase service account key is stored as 'serviceAccountKey.json' in the project root
-    const serviceAccountPath = path.join(__dirname, 'firebase-admin-sdk.json');
-    const serviceAccount = require(serviceAccountPath);
-
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
-    });
-} catch (error) {
-    console.error("Failed to initialize Firebase admin", error);
-    process.exit(1);
-}
-
-module.exports = admin;
+router.post('/', upload.single('file'), (req, res) => {
+   // req.file.path can be used here to process the uploaded CSV
+   res.json({ success: true }); 
+});
+module.exports = router;

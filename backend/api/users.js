@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const admin = require('./firebase-admin-sdk.json');// GET all users
-router.get('/', (req, res) => {
-    const usersRef = admin.database().ref('users');
-    usersRef.once('value', (snapshot) => {
-        res.json({ success: true, data: snapshot.val(), message: 'Users fetched successfully.' });
-    }, error => {
-        res.status(500).json({ success: false, data: null, message: 'Failed to fetch users. ' + error });
-    });
+const db = admin.firestore();
+
+router.get('/', async (req, res) => {
+  const users = await db.collection('users').get();
+  res.json({ success: true, data: users.docs.map(doc => doc.data()), message: 'Users fetched successfully.' });
 });
 
 // GET user by ID

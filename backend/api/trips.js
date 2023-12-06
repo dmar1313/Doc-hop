@@ -1,27 +1,57 @@
-// backend/api/trips.js
-
 const express = require('express');
-const multer = require('multer');
-const { parseCSV } = require('../utils'); // Adjust the path as needed
-const admin = require('firebase-admin'); // Ensure Firebase Admin SDK is set up
-
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' });
+const admin = require('firebase-admin');
 
-// POST endpoint to import trips
-router.post('/import', upload.single('file'), async (req, res) => {
-    try {
-        const filePath = req.file.path;
-        const parsedTrips = await parseCSV(filePath);
-        const tripsRef = admin.database().ref('trips');
-        parsedTrips.forEach(trip => {
-            const newTripRef = tripsRef.push();
-            newTripRef.set(trip);
-        });
-        res.json({ success: true, data: null, message: 'Trips imported successfully.' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+// Create a new trip
+router.post('/', (req, res) => {
+  const newTripRef = admin.database().ref('trips').push();
+  newTripRef.set(req.body, (error) => {
+    if (error) {
+      res.status(500).send('Data could not be saved.' + error);
+    } else {
+      res.status(200).send('Trip saved successfully.');
     }
+  });
 });
 
-module.exports = router;
+// Get all trips
+router.get('/', (req, res) => {
+  const tripsRef = admin.database().ref('trips');
+  tripsRef.once('value', (snapshot) => {
+    res.json(snapshot.val());
+  });
+});
+
+// Get a trip by id
+router.get('/:id', (req, res) => {
+  const tripRef = admin.database().ref(`trips/${req.params.id}`);
+  tripRef.once('value', (snapshot) => {
+    res.json(snapshot.val());
+  });
+});
+
+// Update a trip
+router.put('/:id', (req, res) => {
+  const tripRef = admin.database().ref(`trips/${req.params.id}`);
+  tripRef.update(req.body, (error) => {
+    if (error) {
+      res.status(500).send('Trip could not be updated.' + error);
+    } else {
+      res.status(200).send('Trip updated successfully.');
+    }
+  });
+});
+
+// Delete a trip
+router.delete('/:id', (req, res) => {
+  const tripRef = admin.database().ref(`trips/${req.params.id}`);
+  tripRef.remove((error) => {
+    if (error) {
+      res.status(500).send('Could not delete trip.' + error);
+    } else {
+      res.status(200).send('Trip deleted successfully.');
+    }
+  });
+});
+
+module.exports = router; // make sure to export the router
