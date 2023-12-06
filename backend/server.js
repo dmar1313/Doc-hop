@@ -3,12 +3,8 @@ const driversRouter = require('./api/drivers');
 const vehiclesRouter = require('./api/vehicles');
 const usersRouter = require('./api/users');
 const tripsRouter = require('./api/trips'); 
-const admin = require('firebase-admin');
 const express = require('express');
-const serviceAccount = require('./firebase-admin-sdk.json');
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+
 
 const app = express();  
 

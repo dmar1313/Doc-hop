@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const admin = require('firebase-admin');
+const { admin } = require('./firebaseAdmin.js');
 
 // Create a new trip
 router.post('/', (req, res) => {

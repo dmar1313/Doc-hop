@@ -1,11 +1,5 @@
 const csv = require('csv-parse');
 const fs = require('fs');
-const admin = require('firebase-admin');
-const serviceAccount = require('./path/to/serviceAccountKey.json');
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
 const parseCSV = async (filePath) => {
   return new Promise((resolve, reject) => {
     const parser = csv({ columns: true });
