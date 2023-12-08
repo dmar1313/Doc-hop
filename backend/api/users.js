@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const admin = require('./firebase-admin-sdk.json');// GET all users
-const db = admin.firestore();
+const { admin } = require('./firebaseAdmin');
 
 router.get('/', async (req, res) => {
-  const users = await db.collection('users').get();
+  const users = await admin.collection('users').get();
   res.json({ success: true, data: users.docs.map(doc => doc.data()), message: 'Users fetched successfully.' });
 });
 

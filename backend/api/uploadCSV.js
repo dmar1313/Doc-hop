@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
-const parseCSV = require('./path/to/parseCSVfile');
+const parseCSV = require('./utils');
 
 parseCSV('someFilePath.csv').then((trips) => {
   console.log(trips);
@@ -12,7 +12,13 @@ parseCSV('someFilePath.csv').then((trips) => {
 
 router.post('/', upload.single('file'), (req, res) => {
   // Use the req.file.path to process the uploaded CSV
-  res.json({ success: true }); 
+  parseCSV(req.file.path)
+  .then( trips => {
+    console.log(trips);
+    res.json({ success: true });
+  }) 
+  .catch( error => {
+    console.error(error);
+    res.json({ success: false }); 
+  });
 });
-
-module.exports = router;

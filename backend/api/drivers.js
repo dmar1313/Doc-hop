@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { admin } = require('./firebaseAdmin.js');
-// GET all drivers
+const { admin } = require('./firebaseAdmin');// GET all drivers
 router.get('/', async (req, res) => {
   try {
     const driversSnapshot = await admin.firestore().collection('drivers').get();

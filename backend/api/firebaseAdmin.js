@@ -14,4 +14,4 @@ try {
   process.exit(1);
 }
 
-module.exports = admin;
+module.exports = { admin }; 

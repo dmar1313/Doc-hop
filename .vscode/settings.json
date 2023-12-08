@@ -5,5 +5,6 @@
        "goast.openaiKey": "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",
        "goast.maximumSearchDepth": 3,
        "goast.useGPT4ForInstructionGeneration": false,
-       "goast.useGPT4ForDiffGeneration": false
+       "goast.useGPT4ForDiffGeneration": false,
+       "codeAssist.apiKey": "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"
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { firebase } from './firebase';
+import { db } from './firebase';
 class DashboardPage extends Component {
   constructor(props) {
     super(props);
@@ -25,21 +25,21 @@ class DashboardPage extends Component {
     });
   };
 
- handleFilterSubmit = async () => {
+handleFilterSubmit = async () => {
     try {
-        const db = firebase.database();
-        const tripsRef = db.ref('trips');
+        const tripsRef = db.collection('trips');
         const snapshot = await tripsRef
-                .orderByChild('tripDate')
-                .startAt(this.state.filter.fromDate)
-                .endAt(this.state.filter.toDate)
-                .once('value');
-        const trips = snapshot.val();
+            .where('tripDate', '>=', this.state.filter.fromDate)
+            .where('tripDate', '<=', this.state.filter.toDate)
+            .get();
+        
+        const trips = snapshot.docs.map(doc => doc.data());
         this.setState({ trips });
     } catch (error) {
         console.error('Error fetching filtered trips:', error);
     }
 };
+
     handleFileUpload = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
