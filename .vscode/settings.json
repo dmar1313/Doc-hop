@@ -1,3 +1,10 @@
 {
-       "editor.inlineSuggest.showToolbar": "onHover"
+       "editor.inlineSuggest.showToolbar": "onHover",
+       "gocodeo.authToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MzIzOTYxMjUsImlhdCI6MTcwMTI5MjEyNSwic3ViIjoiNjU2N2E4NWRhN2JlMWE2OTAwNTg0NWFlIiwibmFtZSI6IiIsImlzX3ZlcmlmaWVkIjpmYWxzZX0.kOh14ZnwmuBQ8wRV9B7Q_HXz10QDSGis4Sa2Qwoy9yk",
+       "haselerdev.aiquickfix.apiKey": "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",
+       "goast.openaiKey": "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",
+       "goast.maximumSearchDepth": 3,
+       "goast.useGPT4ForInstructionGeneration": false,
+       "goast.useGPT4ForDiffGeneration": false,
+       "codeAssist.apiKey": "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"
 }

@@ -1,59 +1,64 @@
-// src/pages/LoginPage.js
-import React from 'react';
+import React, { useState } from 'react';
 
 const LoginPage = () => {
-   return (
-    <div className="flex flex-col min-h-screen bg-[#121212] items-center justify-center p-4 text-white">
-      <h1 className="font-epilogue mb-8 text-4xl">Doc-Hopper</h1>
-      <p className="font-barlow mb-4 text-lg">Sign in to continue</p>
-      <form className="w-full max-w-xs">
-        <label htmlFor="email" className="block mb-2 text-sm">
-          Email Address
-        </label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          className="mb-4 w-full p-3 rounded bg-[#262626] text-white"
-          placeholder="you@example.com"
-        />
-        <label htmlFor="password" className="block mb-2 text-sm">
-          Password
-        </label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          className="mb-4 w-full p-3 rounded bg-[#262626] text-white"
-          placeholder="Your Password"
-        />
-        <button
-          type="submit"
-          className="w-full p-3 mb-4 rounded bg-blue-500 hover:bg-blue-700 transition-colors"
-        >
-          Sign In
-        </button>
-        <div className="flex items-center justify-between mb-6">
-          <label className="inline-flex items-center">
-            <input type="checkbox" className="form-checkbox text-blue-600" />
-            <span className="ml-2 text-sm">Remember me</span>
-          </label>
-          <a href="#" className="text-sm text-blue-400 hover:text-blue-200">
-            Forgot your password?
-          </a>
+    const [credentials, setCredentials] = useState({ email: '', password: '' });
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setCredentials(prevCredentials => ({
+            ...prevCredentials,
+            [name]: value
+        }));
+  };
+  
+const loginUser = async (credentials) => {
+    // Example API call using fetch. Replace with your actual API call logic.
+    const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credentials)
+    });
+    const data = await response.json();
+    return data; // The data should include { success: boolean, message: string }
+};
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        try {
+            const response = await loginUser(credentials); // Replace with your API call
+            setLoading(false);
+            if (response.success) {
+                setMessage('Login successful');
+                // Redirect or update UI post-login
+            } else {
+                setMessage(response.message || 'Login failed');
+            }
+        } catch (error) {
+            setLoading(false);
+            setMessage('An error occurred during login');
+        }
+    };
+
+    return (
+        <div className="login-container">
+            {/* Login form */}
+            <form onSubmit={handleSubmit}>
+                {/* Email input */}
+                <input type="email" name="email" value={credentials.email} onChange={handleChange} />
+                {/* Password input */}
+                <input type="password" name="password" value={credentials.password} onChange={handleChange} />
+                {/* Loading and messages */}
+                {loading && <p>Loading...</p>}
+                {message && <p>{message}</p>}
+                <button type="submit" disabled={loading}>Sign In</button>
+            </form>
         </div>
-        <div className="flex items-center justify-center">
-          <button
-            type="button"
-            className="w-52 p-3 rounded flex justify-center items-center bg-[#db4437] hover:bg-[#c1351d] transition-colors"
-          >
-            <i className="fab fa-google mr-3"></i>
-            Sign in with Google
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-}
+    );
+};
 
 export default LoginPage;
