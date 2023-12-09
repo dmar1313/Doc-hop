@@ -6,5 +6,10 @@
        "goast.maximumSearchDepth": 3,
        "goast.useGPT4ForInstructionGeneration": false,
        "goast.useGPT4ForDiffGeneration": false,
-       "codeAssist.apiKey": "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"
+       "codeAssist.apiKey": "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",
+       "sourcegraph.basePath": "C:\\Users\\hacma\\doc-hop2\\Doc-hop",
+       "cody.chat.preInstruction": "\"Before executing any coding command, please analyze the current file and relevant parts of the project for context. Consider the overall architecture, coding standards, and any specific frameworks or libraries being used. Aim to maintain consistency with the existing code style and structure. Provide suggestions that are not only syntactically correct but also align with best practices for the specific language and platform. If the command involves integrating new features or fixing bugs, ensure that your suggestions don't conflict with existing functionality. Lastly, offer a brief explanation for each suggestion to enhance my understanding and learning.\"",
+       "cody.autocomplete.advanced.model": "starcoder-16b",
+       "cody.autocomplete.advanced.provider": "unstable-openai",
+       "cody.autocomplete.advanced.serverEndpoint": "/v1/completions/gpt-3.5-turbo"
 }
