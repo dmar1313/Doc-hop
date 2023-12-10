@@ -1,0 +1,34 @@
+.trip-row {
+    display: flex;
+    border-bottom: 1px solid #ccc; /* Fine line dividing the rows */
+    padding: 8px 0;
+}
+
+.trip-row span {
+    flex: 1; /* Distribute space equally */
+    padding: 0 8px; /* Space inside each cell */
+    /* Add more styling as needed */
+}
+
+.header-row {
+    font-weight: bold; /* Make header text bold */
+    background-color: #8905e8; /* Background color for header */
+    /* Add other styling for header row */
+}
+
+.wheelchair-icon {
+    width: 2px;
+    height: 2px;
+    /* Align the icon as needed */
+}
+@media (max-width: 600px) {
+    .trip-row span {
+        font-size: 14px; /* Smaller font size for small screens */
+        padding: 4px; /* Less padding */
+    }
+    /* Add other responsive adjustments */
+}
+.trip-row span {
+    /* ... other styles ... */
+    color: #ffffff; /* Change to a color that contrasts well with your row background */
+}

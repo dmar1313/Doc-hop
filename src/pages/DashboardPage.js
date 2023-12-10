@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { db } from './firebase';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import "./DashboardPage.css";
+
 import handicapImage from './app-pics/handicap.jfif'; class DashboardPage extends Component {
     constructor(props) {
         super(props);
@@ -25,13 +28,32 @@ import handicapImage from './app-pics/handicap.jfif'; class DashboardPage extend
         });
     };
 
+formatDate = (date) => {
+        if (!date) return null;
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+
+        return [month, day, year].join('/');
+    };
+
     handleFilterSubmit = async () => {
         try {
-            const tripsRef = db.collection('trips');
-            const snapshot = await tripsRef
-                .where('tripDate', '>=', this.state.filter.fromDate)
-                .where('tripDate', '<=', this.state.filter.toDate)
-                .get();
+            const formattedFromDate = this.formatDate(this.state.filter.fromDate);
+            const formattedToDate = this.formatDate(this.state.filter.toDate);
+
+            const tripsRef = collection(db, 'trips');
+            const q = query(tripsRef, 
+                where('Trip Date', '>=', formattedFromDate),
+                where('Trip Date', '<=', formattedToDate)
+            );
+            const snapshot = await getDocs(q);
         
             const trips = snapshot.docs.map(doc => doc.data());
             this.setState({ trips });
@@ -106,19 +128,19 @@ import handicapImage from './app-pics/handicap.jfif'; class DashboardPage extend
                                 selected={this.state.filter.fromDate}
                                 onChange={(date) => this.setState({ filter: { ...this.state.filter, fromDate: date } })}
                                 placeholderText="From date"
-                                className="border p-1 text-white rounded-md"
+                                className="border p-1 text-blue rounded-md"
                             />
                             <DatePicker
                                 selected={this.state.filter.toDate}
                                 onChange={(date) => this.setState({ filter: { ...this.state.filter, toDate: date } })}
                                 placeholderText="To date"
-                                className="border p-1 text-white rounded-md"
+                                className="border p-1 text-blue rounded-md"
                             />
                             <input
                                 name="tripNumber"
                                 onChange={this.handleFilterChange}
-                                placeholder="Trip number"
-                                className="border p-1 text-white rounded-md"
+                                placeholder="trip number"
+                                className="border p-1 text-blue rounded-md"
                             />
                             <input
                                 name="driver"
@@ -137,17 +159,28 @@ import handicapImage from './app-pics/handicap.jfif'; class DashboardPage extend
                     </div>
 
                     <div className="overflow-y-auto h-[calc(100%-40px)]">
-                        <h2 className="text-white font-semibold">Trips</h2>
-                        {Array.isArray(this.state.trips) && this.state.trips.map((trip, index) => (
-                            <div key={index} className="trip-item">
-                                <p>{trip.tripNumber}</p>
-                                <p>{trip.name}</p>
-                                <p>{trip.pickupAddress}</p>
-                                <p>{trip.destinationAddress}</p>
-                                <p>{trip.mileage}</p>
-                                <p>{trip.vehicleType}</p>
-                                {trip.wheelchair && <img src={handicapImage} alt="Wheelchair Accessibility Icon" />}
-                            </div>
+
+                     <div className="bg-[#BF00FF] text-white justify-around trip-row header-row">
+                            <span>Trip Number</span>
+                            <span>Name</span>
+                            <span>Pickup Address</span>
+                            <span>Destination Address</span>
+                            <span>Mileage</span>
+                            <span>Vehicle Type</span>
+                              {/* Add other headers as needed */}
+                         </div>
+
+                      {this.state.trips.map((trip, index) => (
+                         <div key={index} className="trip-row">
+                            <span>{trip.TripNumber}</span>
+                            <span>{trip.Name}</span>
+                            <span>{trip.PickupAddress}</span>
+                            <span>{trip.DestinationAddress}</span>
+                            <span>{trip.Mileage}</span>
+                            <span>{trip.VehicleType}</span>
+                          {/* other trip details */}
+                      {trip.Wheelchair && <img src={handicapImage} alt="Wheelchair Accessibility Icon" className="wheelchair-icon" />}
+                        </div>
                         ))}
                     </div>
                 </div>

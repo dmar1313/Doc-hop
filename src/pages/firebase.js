@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
- apiKey: "AIzaSyBZTV1d2DI-j_X7UAsnzomzMrgtUUBkiCY",
+apiKey: "AIzaSyBZTV1d2DI-j_X7UAsnzomzMrgtUUBkiCY",
  authDomain: "doc-hop.firebaseapp.com",
  databaseURL: "https://doc-hop-default-rtdb.firebaseio.com",
  projectId: "doc-hop",
@@ -14,6 +14,5 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 export const auth = getAuth(app);
 export const db = getFirestore(app);
