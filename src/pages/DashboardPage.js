@@ -3,9 +3,15 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { db } from './firebase';
 import { collection, query, where, getDocs } from "firebase/firestore";
-import "./DashboardPage.css";
+import "./DashboardPage.css"; 
+import AddDriverForm from '../pages/AddDriverForm';
+import AddTripForm from '../pages/AddTripForm';
+import AddVehicleForm from '../pages/AddVehicleForm';
+import Navigation from '../components/Navigation';
+import Modal from '../components/modal'; // Updated import path 
 
-import handicapImage from './app-pics/handicap.jfif'; class DashboardPage extends Component {
+import handicapImage from './app-pics/handicap.jfif';
+class DashboardPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,6 +22,9 @@ import handicapImage from './app-pics/handicap.jfif'; class DashboardPage extend
                 tripNumber: '',
                 driver: ''
             },
+            showAddDriverForm: false,
+            showAddTripForm: false,
+            showAddVehicleForm: false,
             uploadStatus: null,
             uploadDetails: null,
         };
@@ -99,7 +108,17 @@ formatDate = (date) => {
         this.fileInputRef.current.click();
         
     };
+toggleAddDriverForm = () => {
+        this.setState(prevState => ({ showAddDriverForm: !prevState.showAddDriverForm }));
+    };
 
+    toggleAddTripForm = () => {
+        this.setState(prevState => ({ showAddTripForm: !prevState.showAddTripForm }));
+    };
+
+    toggleAddVehicleForm = () => {
+        this.setState(prevState => ({ showAddVehicleForm: !prevState.showAddVehicleForm }));
+    };
    
     render() {
         return (
@@ -112,6 +131,18 @@ formatDate = (date) => {
                     accept=".csv"
                 />
 
+                {/* Navigation Bar */}
+                <Navigation
+                    onAddDriver={this.toggleAddDriverForm}
+                    onAddTrip={this.toggleAddTripForm}
+                    onAddVehicle={this.toggleAddVehicleForm}
+                />
+
+                {/* Modals for Add Forms */}
+                {this.state.showAddDriverForm && <Modal><AddDriverForm onClose={this.toggleAddDriverForm} /></Modal>}
+                {this.state.showAddTripForm && <Modal><AddTripForm onClose={this.toggleAddTripForm} /></Modal>}
+                {this.state.showAddVehicleForm && <Modal><AddVehicleForm onClose={this.toggleAddVehicleForm} /></Modal>}
+
                 <div className="flex-grow bg-[#2d2d2d] flex flex-col justify-between">
                     <div className="flex flex-col items-center justify-center py-4">
                         <h1 className="text-4xl font-bold text-white">
@@ -121,7 +152,7 @@ formatDate = (date) => {
                     </div>
                 </div>
 
-                <div className="h-[40%] bg-[#1f2937] p-4">
+                <div className="h-[50%] bg-[#1f2937] p-4">
                     <div className="flex justify-between items-center p-4 mb-4">
                         <div className="flex items-center space-x-2">
                             <DatePicker
@@ -169,17 +200,16 @@ formatDate = (date) => {
                             <span>Vehicle Type</span>
                               {/* Add other headers as needed */}
                          </div>
-
                       {this.state.trips.map((trip, index) => (
-                         <div key={index} className="trip-row">
-                            <span>{trip.TripNumber}</span>
-                            <span>{trip.Name}</span>
-                            <span>{trip.PickupAddress}</span>
-                            <span>{trip.DestinationAddress}</span>
-                            <span>{trip.Mileage}</span>
-                            <span>{trip.VehicleType}</span>
-                          {/* other trip details */}
-                      {trip.Wheelchair && <img src={handicapImage} alt="Wheelchair Accessibility Icon" className="wheelchair-icon" />}
+                     <div key={index} className="trip-row">
+                        <span className="trip-number-column">{trip['Trip Number']}</span>
+                        <span className="name-column">{trip.Name}</span>
+                        <span className="address-column">{trip['Pickup Address']}</span>
+                        <span className="address-column">{trip['Destination Address']}</span>
+                        <span className="mileage-column">{trip.Mileage}</span>
+                        <span className="vehicle-type-column">{trip['Vehicle Type']}</span>
+                    {trip['Vehicle Type'] && trip['Vehicle Type'].includes('WC Van') && 
+                    <img src={handicapImage} alt="Wheelchair Accessibility Icon" className="wheelchair-icon" />}
                         </div>
                         ))}
                     </div>

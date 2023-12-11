@@ -4,31 +4,38 @@
     padding: 8px 0;
 }
 
+/* General style for all columns */
 .trip-row span {
-    flex: 1; /* Distribute space equally */
     padding: 0 8px; /* Space inside each cell */
-    /* Add more styling as needed */
+    color: #ffffff; /* White color for text */
+}
+
+/* Specific styles for columns */
+.trip-number-column,
+.name-column,
+.address-column,
+.vehicle-type-column {
+    flex: 1; /* These columns take more space */
+}
+
+.mileage-column {
+    flex: 0.5; /* Smaller width for mileage column */
 }
 
 .header-row {
     font-weight: bold; /* Make header text bold */
-    background-color: #8905e8; /* Background color for header */
-    /* Add other styling for header row */
+    background-color: #72030b; /* Background color for header */
 }
 
 .wheelchair-icon {
-    width: 2px;
-    height: 2px;
-    /* Align the icon as needed */
+    width: 20px;
+    height: 20px;
 }
+
 @media (max-width: 600px) {
     .trip-row span {
         font-size: 14px; /* Smaller font size for small screens */
         padding: 4px; /* Less padding */
     }
-    /* Add other responsive adjustments */
 }
-.trip-row span {
-    /* ... other styles ... */
-    color: #ffffff; /* Change to a color that contrasts well with your row background */
-}
+

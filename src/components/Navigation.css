@@ -1,0 +1,59 @@
+/* Overall Navigation Bar Styling */
+.nav {
+    background-color: #020e87; /* Dark background for a sleek look */
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space out elements */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+}
+
+/* NavLink Styling */
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px; /* Spacing between links */
+    font-size: 16px; /* Font size for readability */
+    transition: color 0.3s; /* Smooth transition for hover effects */
+}
+
+.nav a.active {
+    color: #4CAF50; /* Highlight active link */
+}
+
+/* Icon Buttons Styling */
+.nav-icons {
+    display: flex; /* Align icons horizontally */
+    align-items: center;
+}
+
+.nav-icons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 18px; /* Adjust icon size */
+    margin: 0 15px; /* Spacing between icons */
+    transition: color 0.3s; /* Smooth transition for hover effects */
+}
+
+.nav-icons button:hover {
+    color: #4CAF50; /* Color change on hover */
+}
+
+.nav-icons button svg {
+    margin-right: 5px; /* Space between icon and the edge of the button */
+}
+
+/* Responsive Design for smaller screens */
+@media (max-width: 768px) {
+    .nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav a, .nav-icons button {
+        margin-bottom: 10px; /* Adjusted spacing for smaller screens */
+    }
+}

@@ -1,19 +1,28 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-
-const Navigation = ({ isLoggedIn }) => {
+import { FaUserPlus, FaRoad, FaCar } from 'react-icons/fa';
+import './Navigation.css';
+const Navigation = ({ onAddDriver, onAddTrip, onAddVehicle }) => {
     return (
-        <nav>
-            <ul>
-                <li><NavLink to="/" activeClassName="active">Dashboard</NavLink></li>
-                {isLoggedIn ? (
-                    <li><NavLink to="/logout" activeClassName="active">Logout</NavLink></li>
-                    // Include other links for logged-in users
-                ) : (
-                    <li><NavLink to="/login" activeClassName="active">Login</NavLink></li>
-                )}
-                {/* More navigation links as needed */}
-            </ul>
+        <nav className="nav">
+            <NavLink to="/" activeClassName="active">Dashboard</NavLink>
+
+            {/* Button to Add Driver */}
+            <button onClick={onAddDriver} title="Add Driver">
+                <FaUserPlus />
+            </button>
+
+            {/* Button to Add Trip */}
+            <button onClick={onAddTrip} title="Add Trip">
+                <FaRoad />
+            </button>
+
+            {/* Button to Add Vehicle */}
+            <button onClick={onAddVehicle} title="Add Vehicle">
+                <FaCar />
+            </button>
+
+            {/* ... other existing navigation items ... */}
         </nav>
     );
 };
