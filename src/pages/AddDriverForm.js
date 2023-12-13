@@ -1,44 +1,128 @@
 import React, { useState } from 'react';
 
+// Firebase imports
+import { db } from './firebase'; 
+import { doc, setDoc } from 'firebase/firestore';
 
-// Use firebase
 const AddDriverForm = ({ onClose }) => {
-    const [driverDetails, setDriverDetails] = useState({ /* initial state */ });
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState('');
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setLoading(true);
-        try {
-            const response = await setDriverDetails(driverDetails); // Replace with your API call
-            setLoading(false);
-            if (response.success) {
-                setMessage('Driver added successfully');
-                setDriverDetails({ /* reset form fields */ });
-                // Additional success handling
-            } else {
-                setMessage(response.message || 'Failed to add driver');
-            }
-        } catch (error) {
-            setLoading(false);
-            setMessage('An error occurred');
-        }
-    };
+  const [driver, setDriver] = useState({
+    firstName: '',
+    lastName: '', 
+    dlNumber: '',
+    address: '',
+    phone: '',
+    vehicle: '' 
+  });
 
-    return (
-        <div className="form-container">
-            <form onSubmit={handleSubmit}>
-                {/* Form input fields */}
-                {/* Display loading indicator */}
-                {loading && <p>Loading...</p>}
-                {/* Display success or error message */}
-                {message && <p>{message}</p>}
-                <button type="button" onClick={onClose}>Close</button>
-                <button type="submit" disabled={loading}>Add Driver</button>
-            </form>
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    try {
+      // Add driver to 'drivers' collection
+      await setDoc(doc(db, 'drivers', driver.dlNumber), driver);
+
+      setLoading(false);
+      setMessage('Driver added successfully');
+
+      // Clear form
+      setDriver({
+        firstName: '',
+        lastName: '',
+        dlNumber: '',
+        address: '',
+        phone: '',
+        vehicle: ''
+      });
+
+    } catch (err) {
+      setLoading(false);
+      setMessage('Error adding driver');
+      console.error(err);
+    }
+  }
+
+  return (
+     <div className="form-card">
+      <div className="form-header">
+        <h2>Add New Driver</h2>
+      </div>
+      
+      <form onSubmit={handleSubmit}>
+
+        <div className="form-group">
+          <label>First Name</label>
+          <input 
+            type="text" 
+            className="form-control"
+          />
         </div>
-    );
-};
+
+        <input 
+          type="text"
+          placeholder="First Name"
+          value={driver.firstName}
+          onChange={(e) => setDriver({...driver, firstName: e.target.value})} 
+        />
+        <input 
+          type="text"
+          placeholder="Last Name"
+          value={driver.lastName}
+          onChange={(e) => setDriver({...driver, lastName: e.target.value})} 
+              />
+              <input 
+          type="text"
+          placeholder="dlNumber" 
+          value={driver.dlNumber} 
+          onChange={(e) => setDriver({...driver, dlNumber: e.target.value})} 
+              />
+               <input 
+          type="text"
+          placeholder="phone" 
+          value={driver.phone} 
+          onChange={(e) => setDriver({...driver, phone: e.target.value})} 
+              />
+               <input 
+          type="text"
+          placeholder="vehicle" 
+          value={driver.vehicle} 
+          onChange={(e) => setDriver({...driver, vehicle: e.target.value})} 
+              />
+                <div className="form-group">
+          {loading && <p>Loading...</p>}
+          {message && <p>{message}</p>}
+        </div>
+ <div className="form-footer">
+          <button 
+            type="button" 
+            className="btn btn-secondary"
+             onClick={onClose}
+           Close
+        ></button>
+                </div>
+            
+          
+        {/* other input fields */}
+
+        {loading && <p>Loading...</p>}
+
+        {message && <p>{message}</p>}
+
+        <button 
+            type="submit" 
+            className="btn btn-primary"
+            disabled={loading}
+          >
+            Add Driver
+          </button>
+      </form>
+    </div>
+  );
+}
 
 export default AddDriverForm;

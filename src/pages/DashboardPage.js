@@ -133,7 +133,7 @@ toggleAddDriverForm = () => {
 
                 {/* Navigation Bar */}
                 <Navigation
-                    onAddDriver={this.toggleAddDriverForm}
+                    onAddDriver={this.toggleAddDriverForm} 
                     onAddTrip={this.toggleAddTripForm}
                     onAddVehicle={this.toggleAddVehicleForm}
                 />
