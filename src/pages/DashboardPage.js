@@ -108,18 +108,30 @@ formatDate = (date) => {
         this.fileInputRef.current.click();
         
     };
-toggleAddDriverForm = () => {
-        this.setState(prevState => ({ showAddDriverForm: !prevState.showAddDriverForm }));
-    };
+  toggleAddDriverForm = () => {
+    this.setState((prevState) => ({
+      showAddDriverForm: !prevState.showAddDriverForm,
+      showAddTripForm: false,
+      showAddVehicleForm: false,
+    }));
+  };
 
-    toggleAddTripForm = () => {
-        this.setState(prevState => ({ showAddTripForm: !prevState.showAddTripForm }));
-    };
+  toggleAddTripForm = () => {
+    this.setState((prevState) => ({
+      showAddTripForm: !prevState.showAddTripForm,
+      showAddDriverForm: false,
+      showAddVehicleForm: false,
+    }));
+  };
 
-    toggleAddVehicleForm = () => {
-        this.setState(prevState => ({ showAddVehicleForm: !prevState.showAddVehicleForm }));
-    };
-   
+  toggleAddVehicleForm = () => {
+    this.setState((prevState) => ({
+      showAddVehicleForm: !prevState.showAddVehicleForm,
+      showAddDriverForm: false,
+      showAddTripForm: false,
+    }));
+  };
+
     render() {
         return (
             <div className="w-full h-screen bg-[#18181b] font-roboto flex flex-col">
@@ -133,7 +145,7 @@ toggleAddDriverForm = () => {
 
                 {/* Navigation Bar */}
                 <Navigation
-                    onAddDriver={this.toggleAddDriverForm}
+                    onAddDriver={this.toggleAddDriverForm} 
                     onAddTrip={this.toggleAddTripForm}
                     onAddVehicle={this.toggleAddVehicleForm}
                 />
