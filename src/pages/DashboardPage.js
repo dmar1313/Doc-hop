@@ -144,12 +144,12 @@ formatDate = (date) => {
                 />
 
                 {/* Navigation Bar */}
-                <Navigation
-                    onAddDriver={this.toggleAddDriverForm} 
-                    onAddTrip={this.toggleAddTripForm}
-                    onAddVehicle={this.toggleAddVehicleForm}
-                />
-
+               <Navigation 
+  history={this.props.history}
+  onAddDriver={this.toggleAddDriverForm} 
+  onAddTrip={this.toggleAddTripForm}
+  onAddVehicle={this.toggleAddVehicleForm} 
+/>
                 {/* Modals for Add Forms */}
                 {this.state.showAddDriverForm && <Modal><AddDriverForm onClose={this.toggleAddDriverForm} /></Modal>}
                 {this.state.showAddTripForm && <Modal><AddTripForm onClose={this.toggleAddTripForm} /></Modal>}

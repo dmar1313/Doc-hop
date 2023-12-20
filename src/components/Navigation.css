@@ -26,6 +26,7 @@
 .nav-icons {
     display: flex; /* Align icons horizontally */
     align-items: center;
+    justify-content: flex-start; /* Align icons to the left */
 }
 
 .nav-icons button {

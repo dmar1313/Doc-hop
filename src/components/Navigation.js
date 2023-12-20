@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaUserPlus, FaRoad, FaCar } from 'react-icons/fa';
@@ -6,7 +5,6 @@ import './Navigation.css';
 const Navigation = ({ onAddDriver, onAddTrip, onAddVehicle }) => {
     return (
         <nav className="nav">
-            <NavLink to="/" activeClassName="active" >Dashboard</NavLink>
             {/* Button to Add Driver */}
             <button onClick={onAddDriver} title="Add Driver">
                 <FaUserPlus />
@@ -19,6 +17,10 @@ const Navigation = ({ onAddDriver, onAddTrip, onAddVehicle }) => {
             <button onClick={onAddVehicle} title="Add Vehicle">
                 <FaCar />
             </button>
+           <button onClick={() => props.history.push('/drivers')} title="List of Drivers">Drivers
+</button>
+<button onClick={() => props.history.push('/vehicles')} title="List of Vehicles">Vehicles
+</button>
             {/* ... other existing navigation items ... */}
         </nav>
     );
